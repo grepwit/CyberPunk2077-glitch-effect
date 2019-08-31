@@ -5,9 +5,9 @@
  */
 !function (window) {
 
-    var _MAX_WIDTH_OFFSET = 10;
+    var _MAX_WIDTH_OFFSET = 15;
 
-    var _DEFAULT_GLITCH_INTERVAL = 50;
+    var _DEFAULT_GLITCH_INTERVAL = 5;
 
     function _init() {
         this.timerId = 0;
@@ -23,15 +23,19 @@
         this.hratio = this.canvas.height / 430;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.drawImage(this.elem, 0, 0);
-        this.elem.parentNode.style = `width:${canvas.width}px;margin-right:0px;`;
+        this.elem.parentNode.style = `width:${canvas.width}px;margin:0 auto;`;
         this.elem.parentNode.insertBefore(dummyCanvas, this.elem);
         this.elem.parentNode.replaceChild(canvas, this.elem);
-        $(this.canvas).hover(function () {
+        $(this.canvas).ready(function () {
             clearInterval(this.timerId);
             this.timerId = setInterval(this.process.bind(this), _DEFAULT_GLITCH_INTERVAL);
+        }.bind(this));
+        $(this.canvas).hover(function () {
+            clearInterval(this.timerId);
+            this.timerId = setInterval(this.process.bind(this), 80);
         }.bind(this), function () {
             clearInterval(this.timerId);
-            this.ctx.drawImage(this.elem, 0, 0);
+            this.timerId = setInterval(this.process.bind(this), _DEFAULT_GLITCH_INTERVAL);
         }.bind(this));
     }
     function Glitch(imgNode) {
